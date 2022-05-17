@@ -92,7 +92,7 @@ namespace Client
                 {
                     UdpClient client = new UdpClient();
                     client.Connect(ip, port);
-                    var message = Encoding.Unicode.GetBytes("hallo freund!");
+                    var message = Encoding.Unicode.GetBytes($"hallo freund!, ich bin {Locals}");
                     client.Send(message);
                     Thread.Sleep(1000);
                 }
