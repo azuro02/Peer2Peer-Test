@@ -49,6 +49,7 @@ namespace Server1
         IPAddress LocalIp { get; set; }
         int LocalPort { get; set; }
         public IPEndPoint Ep { get; set; }
+        public IPEndPoint LocalEp { get; set; }
 
         public Client(IPEndPoint ep, IPEndPoint localEndPoint)
         {
@@ -56,11 +57,13 @@ namespace Server1
             Ip = ep.Address;
             Port = ep.Port.ToString();
             Console.WriteLine("Data from : "+ Ip + ":" + Port);
+            
+            LocalEp = localEndPoint;
             LocalIp = localEndPoint.Address;
             LocalPort = localEndPoint.Port;
         }
 
-        public void Exchange(IPEndPoint ep)
+        public void Exchange(IPEndPoint peerEp, IPEndPoint peerLocalEp)
         {
             //Response
             UdpClient udpClient = new UdpClient();
@@ -69,7 +72,7 @@ namespace Server1
             //var message = Encoding.Unicode.GetBytes("Server: verbinden mit " + ep.Address.ToString() + ":" + ep.Port);
             //udpClient.Send(message);
 
-            var data = Encoding.Unicode.GetBytes(ep.Address.ToString() + ":" + ep.Port + ";" + LocalIp+ ":" + LocalPort);
+            var data = Encoding.Unicode.GetBytes(peerEp.Address.ToString() + ":" + peerEp.Port + ";" + peerLocalEp.Address.ToString()+ ":" + peerLocalEp.Port);
             udpClient.Send(data);
         }
     }
@@ -78,8 +81,8 @@ namespace Server1
     {
         public static void Ship(Client a, Client b)
         {
-            a.Exchange(b.Ep);
-            b.Exchange(a.Ep);
+            a.Exchange(b.Ep, b.LocalEp);
+            b.Exchange(a.Ep, a.LocalEp);
         }
     }
 }

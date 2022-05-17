@@ -38,7 +38,7 @@ namespace Client
                 Console.WriteLine("waiting for response...");
                 Connector.Listen(2222); //Lauscht an port 2222 auf Antwort des Servers
 
-                udpClient.Close();
+                //udpClient.Close();
                 Thread.Sleep(5000);
             }
             catch (Exception ex)
