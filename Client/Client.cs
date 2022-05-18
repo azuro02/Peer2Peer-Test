@@ -15,6 +15,8 @@ namespace Client
     internal class Client
     {
         public static string Locals { get; set; }
+        public static IPEndPoint ServerEp { get; set; }
+   
         static void Main(string[] args)
         {
             //Init
@@ -22,14 +24,14 @@ namespace Client
             IPAddress ServerIP = IPAddress.Parse("192.168.178.22");
             
             int count = 0;
-            IPEndPoint ep = new IPEndPoint(ServerIP, serverPort);
+            ServerEp = new IPEndPoint(ServerIP, serverPort);
 
             
             try
             {
                 //Server anfragen und lokalen EndPoint schicken
                 UdpClient udpClient = new UdpClient();
-                udpClient.Connect(ep); 
+                udpClient.Connect(ServerEp); 
                 Locals = udpClient.Client.LocalEndPoint.ToString(); 
                 byte[] sendData = Encoding.Unicode.GetBytes(Locals);
 
@@ -70,6 +72,11 @@ namespace Client
                     data4 = data3[1].Split(':');
                     string localIp = data4[0];
                     string localPort = data4[1];
+
+                    //Antwort an Server senden (paket erhalten)
+                    byte[] sendData = Encoding.Unicode.GetBytes("Daten erhalten!");
+                    Sender.Senden(ServerEp, sendData);
+
 
                     //an Peer Partner Daten senden
                     Thread thread1 = new Thread(() => Connect(peerIp, Int32.Parse(peerPort)));
@@ -132,6 +139,15 @@ namespace Client
                 listener.Close();
                 listener.Dispose();
                 return null;
+            }
+        }
+
+        static class Sender
+        {
+            public static void Senden(IPEndPoint ep, byte[] data)
+            {
+                UdpClient udpClient = new UdpClient(ep);
+                udpClient.Send(data);
             }
         }
     }

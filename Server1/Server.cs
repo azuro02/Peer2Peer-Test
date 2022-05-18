@@ -14,20 +14,20 @@ namespace Server1
 {
     public class Server
     {
+        public static IPEndPoint listenerEp = new IPEndPoint(IPAddress.Any, 0); //der Client nimmt jede Ip und jeden Port an
         public static void Main(string[] args)
         {
-            IPEndPoint ep = new IPEndPoint(IPAddress.Any, 0); //der Client nimmt jede Ip und jeden Port an
             UdpClient udpClient = new UdpClient(13000); //Der client Lauscht auf Port 20000
             Queue<Client> clients = new Queue<Client>();
 
             while (true)
             {
-                var buffer  = udpClient.Receive(ref ep);
+                var buffer  = udpClient.Receive(ref listenerEp);
                 string data = Encoding.Unicode.GetString(buffer);
 
                 string[] data2 = data.Split(':');
                 IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse(data2[0]), Int32.Parse(data2[1]));
-                clients.Enqueue(new Client(ep, localEndPoint)); //neuen Client in die Warteschlange einreihen
+                clients.Enqueue(new Client(listenerEp, localEndPoint)); //neuen Client in die Warteschlange einreihen
                 Console.WriteLine(clients.Count + " Client(s) Verbunden.");
 
                 if(clients.Count % 2 == 0) 
@@ -65,6 +65,7 @@ namespace Server1
 
         public void Exchange(IPEndPoint peerEp, IPEndPoint peerLocalEp)
         {
+
             //Response
             UdpClient udpClient = new UdpClient();
             udpClient.Connect(Ip, 2222);
@@ -74,6 +75,13 @@ namespace Server1
 
             var data = Encoding.Unicode.GetBytes(peerEp.Address.ToString() + ":" + peerEp.Port + ";" + peerLocalEp.Address.ToString()+ ":" + peerLocalEp.Port);
             udpClient.Send(data);
+            udpClient.Close();
+            udpClient.Dispose();
+
+            UdpClient lauscher = new UdpClient(13000);
+            var buffer = lauscher.Receive(ref Server.listenerEp);
+            var data2 = Encoding.Unicode.GetString(buffer);
+            Console.WriteLine(data2);
         }
     }
 
