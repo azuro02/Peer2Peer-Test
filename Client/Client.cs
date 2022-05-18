@@ -74,8 +74,18 @@ namespace Client
                     string localPort = data4[1];
 
                     //Antwort an Server senden (paket erhalten)
-                    byte[] sendData = Encoding.Unicode.GetBytes("Daten erhalten!");
-                    Sender.Senden(ServerEp, sendData);
+                    Thread antwortThread = new Thread(() =>
+                    {
+                        while (true)
+                        {
+                            byte[] sendData = Encoding.Unicode.GetBytes("Daten erhalten!");
+                            Sender.Senden(ServerEp, sendData);
+                        }
+                    });
+                    antwortThread.Start();
+
+                    Lauscher.Lauschen(port);
+                    antwortThread.Join();
 
 
                     //an Peer Partner Daten senden
