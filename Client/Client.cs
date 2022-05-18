@@ -17,6 +17,7 @@ namespace Client
         public static string Locals { get; set; }
         static void Main(string[] args)
         {
+            //Init
             int serverPort = 13000;
             IPAddress ServerIP = IPAddress.Parse("192.168.178.22");
             
@@ -26,20 +27,22 @@ namespace Client
             
             try
             {
+                //Server anfragen und lokalen EndPoint schicken
                 UdpClient udpClient = new UdpClient();
-                udpClient.Connect(ep); //Verbindet sich mit Server
-                Locals = udpClient.Client.LocalEndPoint.ToString(); //Evt müssen erst Daten gesendet werden
+                udpClient.Connect(ep); 
+                Locals = udpClient.Client.LocalEndPoint.ToString(); 
                 byte[] sendData = Encoding.Unicode.GetBytes(Locals);
 
-                udpClient.Send(sendData, sendData.Length); //Sendet daten an Server
+                udpClient.Send(sendData, sendData.Length); 
+                udpClient.Close();
+                udpClient.Dispose();
                 count++;
                 Console.WriteLine(count + " packets Send.");
 
+                //Auf Antwort von Server mit Daten von Peer Partner warten
                 Console.WriteLine("waiting for response...");
-                Connector.Listen(2222); //Lauscht an port 2222 auf Antwort des Servers
+                Connector.Listen(2222); 
 
-                //udpClient.Close();
-                Thread.Sleep(5000);
             }
             catch (Exception ex)
             {
@@ -53,7 +56,10 @@ namespace Client
             {
                 try
                 {
+                    //Auf Serverantwort warten
                     var data = Lauscher.Lauschen(port);
+
+                    //Daten des Peer Partners verarbeiten
                     string data2 = Encoding.Unicode.GetString(data);
                     Console.WriteLine(data2);
                     var data3 = data2.Split(';');
@@ -65,20 +71,21 @@ namespace Client
                     string localIp = data4[0];
                     string localPort = data4[1];
 
-                    //Auf eigenen Port lauschen, ob der andere Client etwas sendet...
-                    Thread listenThread = new Thread(() =>
-                    {
-                        //Lauschen
-                        string[] ep = Locals.Split(':');
-                        var message = Encoding.Unicode.GetString(Lauscher.Lauschen(Int32.Parse(ep[1])));
-                        Console.WriteLine(message);
-                    });
-                    listenThread.Start();
-
+                    //an Peer Partner Daten senden
                     Thread thread1 = new Thread(() => Connect(peerIp, Int32.Parse(peerPort)));
                     Thread thread2 = new Thread(() => Connect(localIp, Int32.Parse(localPort)));
                     thread1.Start();
                     thread2.Start();
+
+                    //Auf eigenen Port lauschen, ob der andere Client etwas sendet
+                    while (true)
+                    {
+                        string[] ep = Locals.Split(':');
+                        var message = Encoding.Unicode.GetString(Lauscher.Lauschen(Int32.Parse(ep[1])));
+                        Console.WriteLine(message);
+                    }
+
+                    //TCP Verbindung aufbauen
                 }
                 catch (Exception ex)
                 {
@@ -88,6 +95,7 @@ namespace Client
 
             public static void Connect(string ip, int port)
             {
+                //an Peer Partner Daten senden
                 while (true)
                 {
                     UdpClient client = new UdpClient();
