@@ -146,7 +146,8 @@ namespace Client
         {
             public static void Senden(IPEndPoint ep, byte[] data)
             {
-                UdpClient udpClient = new UdpClient(ep);
+                UdpClient udpClient = new UdpClient();
+                udpClient.Connect(ep.Address, ep.Port);
                 udpClient.Send(data);
             }
         }

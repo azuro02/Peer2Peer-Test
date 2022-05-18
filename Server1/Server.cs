@@ -17,12 +17,15 @@ namespace Server1
         public static IPEndPoint listenerEp = new IPEndPoint(IPAddress.Any, 0); //der Client nimmt jede Ip und jeden Port an
         public static void Main(string[] args)
         {
-            UdpClient udpClient = new UdpClient(13000); //Der client Lauscht auf Port 20000
             Queue<Client> clients = new Queue<Client>();
 
             while (true)
             {
+                UdpClient udpClient = new UdpClient(13000); //Der client Lauscht auf Port 20000
+
                 var buffer  = udpClient.Receive(ref listenerEp);
+                udpClient.Close();
+                udpClient.Dispose();
                 string data = Encoding.Unicode.GetString(buffer);
 
                 string[] data2 = data.Split(':');
@@ -82,6 +85,8 @@ namespace Server1
             var buffer = lauscher.Receive(ref Server.listenerEp);
             var data2 = Encoding.Unicode.GetString(buffer);
             Console.WriteLine(data2);
+            lauscher.Close();
+            lauscher.Dispose();
         }
     }
 
