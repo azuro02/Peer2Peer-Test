@@ -80,12 +80,13 @@ namespace Client
                         {
                             byte[] sendData = Encoding.Unicode.GetBytes("Daten erhalten!");
                             Sender.Senden(ServerEp, sendData);
+                            Thread.Sleep(2000);
                         }
                     });
                     antwortThread.Start();
 
                     Lauscher.Lauschen(port);
-                    antwortThread.Join();
+                    antwortThread.Suspend(); //schlechte lösung, lieber thread mit runnig bool laufen lass und den auf false setzen und mit join() beenden
 
 
                     //an Peer Partner Daten senden

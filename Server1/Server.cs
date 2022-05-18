@@ -28,12 +28,15 @@ namespace Server1
                 udpClient.Dispose();
                 string data = Encoding.Unicode.GetString(buffer);
 
-                string[] data2 = data.Split(':');
-                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse(data2[0]), Int32.Parse(data2[1]));
-                clients.Enqueue(new Client(listenerEp, localEndPoint)); //neuen Client in die Warteschlange einreihen
-                Console.WriteLine(clients.Count + " Client(s) Verbunden.");
+                if(data != "Daten erhalten!")
+                {
+                    string[] data2 = data.Split(':');
+                    IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse(data2[0]), Int32.Parse(data2[1]));
+                    clients.Enqueue(new Client(listenerEp, localEndPoint)); //neuen Client in die Warteschlange einreihen
+                    Console.WriteLine(clients.Count + " Client(s) Verbunden.");
+                }
 
-                if(clients.Count % 2 == 0) 
+                if((clients.Count != 0) && (clients.Count % 2 == 0)) 
                 {
                     Client a = clients.Dequeue();
                     Client b = clients.Dequeue();
@@ -78,8 +81,7 @@ namespace Server1
 
             var data = Encoding.Unicode.GetBytes(peerEp.Address.ToString() + ":" + peerEp.Port + ";" + peerLocalEp.Address.ToString()+ ":" + peerLocalEp.Port);
             udpClient.Send(data);
-            udpClient.Close();
-            udpClient.Dispose();
+            
 
             UdpClient lauscher = new UdpClient(13000);
             var buffer = lauscher.Receive(ref Server.listenerEp);
@@ -87,6 +89,10 @@ namespace Server1
             Console.WriteLine(data2);
             lauscher.Close();
             lauscher.Dispose();
+
+            udpClient.Send(data);
+            udpClient.Close();
+            udpClient.Dispose();
         }
     }
 
