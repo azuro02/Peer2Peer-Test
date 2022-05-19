@@ -79,10 +79,11 @@ namespace Server1
             //var message = Encoding.Unicode.GetBytes("Server: verbinden mit " + ep.Address.ToString() + ":" + ep.Port);
             //udpClient.Send(message);
 
+            Console.WriteLine($"Peer Partner Daten senden an {Ip}");
             var data = Encoding.Unicode.GetBytes(peerEp.Address.ToString() + ":" + peerEp.Port + ";" + peerLocalEp.Address.ToString()+ ":" + peerLocalEp.Port);
             udpClient.Send(data);
-            
 
+            Console.WriteLine("Auf Daten erhalten lauschen");
             UdpClient lauscher = new UdpClient(13000);
             var buffer = lauscher.Receive(ref Server.listenerEp);
             var data2 = Encoding.Unicode.GetString(buffer);
@@ -90,6 +91,7 @@ namespace Server1
             lauscher.Close();
             lauscher.Dispose();
 
+            Console.WriteLine("okay senden");
             udpClient.Send(data);
             udpClient.Close();
             udpClient.Dispose();
@@ -100,9 +102,10 @@ namespace Server1
     {
         public static void Ship(Client a, Client b)
         {
-            Thread thread = new Thread (() => a.Exchange(b.Ep, b.LocalEp));
-            thread.Start();
-            thread.Join();
+            //Thread thread = new Thread (() => a.Exchange(b.Ep, b.LocalEp));
+            //thread.Start();
+            //thread.Join();
+            a.Exchange(b.Ep, b.LocalEp);
             b.Exchange(a.Ep, a.LocalEp);
             
 
