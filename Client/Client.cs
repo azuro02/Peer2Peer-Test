@@ -92,6 +92,9 @@ namespace Client
                     sending = false; //Achtung illegal! hierfür lieber Async oder so statt Thread verwenden
 
 
+                    //Warten bis Adressedaten auch bei peer partner
+                    Lauscher.Lauschen(port);
+
                     //an Peer Partner Daten senden
                     Thread thread1 = new Thread(() => Connect(peerIp, Int32.Parse(peerPort)));
                     Thread thread2 = new Thread(() => Connect(localIp, Int32.Parse(localPort)));

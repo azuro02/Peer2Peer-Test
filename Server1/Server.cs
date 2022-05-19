@@ -102,6 +102,16 @@ namespace Server1
         {
             a.Exchange(b.Ep, b.LocalEp);
             b.Exchange(a.Ep, a.LocalEp);
+
+            UdpClient udpClient = new UdpClient();
+            udpClient.Connect(a.Ep);
+
+            var data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
+            udpClient.Send(data);
+
+            udpClient.Connect(b.Ep);
+            data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
+            udpClient.Send(data);
         }
     }
 }
