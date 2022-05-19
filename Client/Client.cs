@@ -54,6 +54,7 @@ namespace Client
 
         static class Connector
         {
+            static bool sending = true;
             public static void Listen(int port)
             {
                 try
@@ -74,9 +75,10 @@ namespace Client
                     string localPort = data4[1];
 
                     //Antwort an Server senden (paket erhalten)
+                    
                     Thread antwortThread = new Thread(() =>
                     {
-                        while (true)
+                        while (sending)
                         {
                             byte[] sendData = Encoding.Unicode.GetBytes("Daten erhalten!");
                             Sender.Senden(ServerEp, sendData);
@@ -86,7 +88,8 @@ namespace Client
                     antwortThread.Start();
 
                     Lauscher.Lauschen(port);
-                    antwortThread.Suspend(); //schlechte lösung, lieber thread mit runnig bool laufen lass und den auf false setzen und mit join() beenden
+                    //Senden Stoppen
+                    sending = false; //Achtung illegal! hierfür lieber Async oder so statt Thread verwenden
 
 
                     //an Peer Partner Daten senden
