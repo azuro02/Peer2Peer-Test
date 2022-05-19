@@ -60,9 +60,11 @@ namespace Client
                 try
                 {
                     //Auf Serverantwort warten
+                    Console.WriteLine("Auf Serverantwort warten");
                     var data = Lauscher.Lauschen(port);
 
                     //Daten des Peer Partners verarbeiten
+                    Console.WriteLine("Daten des Peer Partners verarbeiten");
                     string data2 = Encoding.Unicode.GetString(data);
                     Console.WriteLine(data2);
                     var data3 = data2.Split(';');
@@ -75,6 +77,7 @@ namespace Client
                     string localPort = data4[1];
 
                     //Antwort an Server senden (paket erhalten)
+                    Console.WriteLine("Antwort an Server senden (paket erhalten)");
                     
                     Thread antwortThread = new Thread(() =>
                     {
@@ -87,15 +90,17 @@ namespace Client
                     });
                     antwortThread.Start();
 
+                    Console.WriteLine("ok lauschen");
                     Lauscher.Lauschen(port);
                     //Senden Stoppen
                     sending = false; //Achtung illegal! hierfür lieber Async oder so statt Thread verwenden
 
 
                     //Warten bis Adressedaten auch bei peer partner
-                    Console.WriteLine(Encoding.Unicode.GetString(Lauscher.Lauschen(port))); 
+                    Console.WriteLine(Encoding.Unicode.GetString(Lauscher.Lauschen(port)));
 
                     //an Peer Partner Daten senden
+                    Console.WriteLine("an Peer Partner Daten senden");
                     Thread thread1 = new Thread(() => Connect(peerIp, Int32.Parse(peerPort)));
                     Thread thread2 = new Thread(() => Connect(localIp, Int32.Parse(localPort)));
                     thread1.Start();

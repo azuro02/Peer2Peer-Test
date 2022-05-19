@@ -100,8 +100,11 @@ namespace Server1
     {
         public static void Ship(Client a, Client b)
         {
-            a.Exchange(b.Ep, b.LocalEp);
+            Thread thread = new Thread (() => a.Exchange(b.Ep, b.LocalEp));
+            thread.Start();
+            thread.Join();
             b.Exchange(a.Ep, a.LocalEp);
+            
 
             UdpClient udpClient = new UdpClient();
             udpClient.Connect(a.Ep);
