@@ -81,7 +81,7 @@ namespace Server1
 
             Console.WriteLine($"Peer Partner Daten senden an {Ip}");
             var data = Encoding.Unicode.GetBytes(peerEp.Address.ToString() + ":" + peerEp.Port + ";" + peerLocalEp.Address.ToString()+ ":" + peerLocalEp.Port);
-            Thread.Sleep(500);
+            Thread.Sleep(5000);
             udpClient.Send(data);
 
             Console.WriteLine("Auf Daten erhalten lauschen");
