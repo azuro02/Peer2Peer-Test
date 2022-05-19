@@ -93,7 +93,7 @@ namespace Client
 
 
                     //Warten bis Adressedaten auch bei peer partner
-                    Lauscher.Lauschen(port);
+                    Console.WriteLine(Encoding.Unicode.GetString(Lauscher.Lauschen(port))); 
 
                     //an Peer Partner Daten senden
                     Thread thread1 = new Thread(() => Connect(peerIp, Int32.Parse(peerPort)));
