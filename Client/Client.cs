@@ -97,8 +97,8 @@ namespace Client
 
 
                     //Warten bis Adressedaten auch bei peer partner
-                    Console.WriteLine("Warten bis Adressedaten auch bei peer partner");
-                    Console.WriteLine(Encoding.Unicode.GetString(Lauscher.Lauschen(port)));
+                    //Console.WriteLine("Warten bis Adressedaten auch bei peer partner");
+                    //Console.WriteLine(Encoding.Unicode.GetString(Lauscher.Lauschen(port)));
 
                     //an Peer Partner Daten senden
                     Console.WriteLine("an Peer Partner Daten senden");

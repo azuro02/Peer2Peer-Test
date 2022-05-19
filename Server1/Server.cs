@@ -110,20 +110,20 @@ namespace Server1
             b.Exchange(a.Ep, a.LocalEp);
 
 
-            UdpClient udpClient = new UdpClient();
-            udpClient.Connect(a.Ep);
+            //UdpClient udpClient = new UdpClient();
+            //udpClient.Connect(a.Ep);
 
-            var data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
-            Thread.Sleep(500);
-            udpClient.Send(data);
-            udpClient.Close();
-            udpClient.Dispose();
+            //var data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
+            //Thread.Sleep(500);
+            //udpClient.Send(data);
+            //udpClient.Close();
+            //udpClient.Dispose();
 
-            UdpClient udpClient2 = new UdpClient();
-            udpClient2.Connect(b.Ep);
-            data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
-            Thread.Sleep(500);
-            udpClient2.Send(data);
+            //UdpClient udpClient2 = new UdpClient();
+            //udpClient2.Connect(b.Ep);
+            //data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
+            //Thread.Sleep(500);
+            //udpClient2.Send(data);
         }
     }
 }
