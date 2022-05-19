@@ -108,10 +108,13 @@ namespace Server1
 
             var data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
             udpClient.Send(data);
+            udpClient.Close();
+            udpClient.Dispose();
 
-            udpClient.Connect(b.Ep);
+            UdpClient udpClient2 = new UdpClient();
+            udpClient2.Connect(b.Ep);
             data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
-            udpClient.Send(data);
+            udpClient2.Send(data);
         }
     }
 }
