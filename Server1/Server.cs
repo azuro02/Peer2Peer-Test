@@ -81,6 +81,7 @@ namespace Server1
 
             Console.WriteLine($"Peer Partner Daten senden an {Ip}");
             var data = Encoding.Unicode.GetBytes(peerEp.Address.ToString() + ":" + peerEp.Port + ";" + peerLocalEp.Address.ToString()+ ":" + peerLocalEp.Port);
+            Thread.Sleep(500);
             udpClient.Send(data);
 
             Console.WriteLine("Auf Daten erhalten lauschen");
@@ -107,12 +108,13 @@ namespace Server1
             //thread.Join();
             a.Exchange(b.Ep, b.LocalEp);
             b.Exchange(a.Ep, a.LocalEp);
-            
+
 
             UdpClient udpClient = new UdpClient();
             udpClient.Connect(a.Ep);
 
             var data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
+            Thread.Sleep(500);
             udpClient.Send(data);
             udpClient.Close();
             udpClient.Dispose();
@@ -120,6 +122,7 @@ namespace Server1
             UdpClient udpClient2 = new UdpClient();
             udpClient2.Connect(b.Ep);
             data = Encoding.Unicode.GetBytes("Hole punching kann gestartet werden!");
+            Thread.Sleep(500);
             udpClient2.Send(data);
         }
     }
