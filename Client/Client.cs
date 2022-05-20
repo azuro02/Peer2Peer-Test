@@ -21,7 +21,7 @@ namespace Client
         {
             //Init
             int serverPort = 13000;
-            IPAddress ServerIP = IPAddress.Parse("192.168.178.22");
+            IPAddress ServerIP = IPAddress.Parse("10.214.79.95");
             
             int count = 0;
             ServerEp = new IPEndPoint(ServerIP, serverPort);

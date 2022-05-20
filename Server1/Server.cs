@@ -41,6 +41,7 @@ namespace Server1
                     Client a = clients.Dequeue();
                     Client b = clients.Dequeue();
                     Shipper.Ship(a, b);
+                    Console.WriteLine("It's a match!");
                 }
             }
             
